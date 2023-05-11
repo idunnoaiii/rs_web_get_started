@@ -20,7 +20,10 @@ pub fn read_file(file_name: &str) -> Map<String, Value> {
 
 
 pub fn write_to_file(file_name: &str, state: &mut Map<String, Value>) {
+
     let new_data = json!(state);
+
     fs::write( file_name.to_string(), new_data.to_string())
         .expect("Unable to write file");
+
 }

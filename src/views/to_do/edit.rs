@@ -1,8 +1,6 @@
-use std::process;
-
 use actix_web::{web, HttpResponse};
 
-use crate::process::{process_input};
+use crate::process::process_input;
 use crate::to_do::enums::TaskStatus;
 use crate::to_do::to_do_factory;
 use crate::{
@@ -17,7 +15,7 @@ pub async fn edit(to_do_item: web::Json<TodoItem>) -> HttpResponse {
     match state.get(&to_do_item.title) {
         Some(result) => {
             status = TaskStatus::from_string(result.as_str().unwrap().to_string());
-        },
+        }
         None => {
             return HttpResponse::NotFound().json(format!("{} not in state", &to_do_item.title))
         }

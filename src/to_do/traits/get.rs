@@ -1,6 +1,5 @@
-use serde_json::Map;
 use serde_json::value::Value;
-
+use serde_json::Map;
 
 pub trait Get {
     fn get(&self, title: &String, state: &Map<String, Value>) {
@@ -9,8 +8,8 @@ pub trait Get {
             Some(result) => {
                 println!("\n\nItem: {}", title);
                 println!("Status: {}\n\n", result);
-            },
-            None => println!("item: {} was not found", title)
+            }
+            None => println!("item: {} was not found", title),
         }
     }
 }

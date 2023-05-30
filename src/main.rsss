@@ -1,0 +1,7 @@
+use std::{fs::File, io::Read};
+
+mod database;
+
+fn main() {
+    database::establish_connection();
+}

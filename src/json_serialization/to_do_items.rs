@@ -1,11 +1,17 @@
 use crate::state::read_file;
 use crate::to_do::enums::TaskStatus;
 use crate::to_do::structs::base::Base;
-use crate::to_do::{ItemTypes, to_do_factory};
-use actix_web::http::header::ContentType;
-use actix_web::{Responder, HttpResponse};
+use crate::to_do::{to_do_factory, ItemTypes};
 use actix_web::body::BoxBody;
+use actix_web::http::header::ContentType;
+use actix_web::{HttpResponse, Responder};
 use serde::Serialize;
+
+use crate::database::establish_connection;
+use crate::diesel;
+use crate::models::item::item::Item;
+use crate::schema::to_do;
+use diesel::prelude::*;
 
 #[derive(Serialize)]
 pub struct TodoItems {
@@ -38,32 +44,44 @@ impl TodoItems {
         };
     }
 
-    pub fn get_state() -> TodoItems {
+    #[allow(unused)]
+    fn get_state_json() -> TodoItems {
         let state = read_file("./state.json");
-
         let mut array_buffer = Vec::new();
-
         for (key, value) in state {
             let status = TaskStatus::from_string(value.as_str().unwrap().to_string());
             let item = to_do_factory(&key, status);
             array_buffer.push(item);
+        }
+        return TodoItems::new(array_buffer);
+    }
+
+    pub fn get_state() -> TodoItems {
+        let connection = establish_connection();
+        let mut array_buffer = Vec::new();
+
+        let items = to_do::table
+            .order(to_do::columns::id.asc())
+            .load::<Item>(&connection)
+            .unwrap();
+
+        for item in items {
+            let status = TaskStatus::from_string(item.status);
+            let new_item = to_do_factory(&item.title, status);
+            array_buffer.push(new_item);
         }
 
         return TodoItems::new(array_buffer);
     }
 }
 
-
 impl Responder for TodoItems {
     type Body = BoxBody;
 
-    fn respond_to(self, _req: &actix_web::HttpRequest) -> actix_web::HttpResponse<Self::Body> {
-
+    fn respond_to(self, _req: &actix_web::HttpRequest) -> HttpResponse<Self::Body> {
         let body = serde_json::to_string(&self).unwrap();
-
         return HttpResponse::Ok()
             .content_type(ContentType::json())
             .body(body);
     }
-    
 }

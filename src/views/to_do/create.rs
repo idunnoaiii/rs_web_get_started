@@ -1,15 +1,15 @@
-use crate::to_do::{to_do_factory, enums::TaskStatus};
-use crate::state::read_file;
-use crate::process::process_input;
-use crate::diesel;
-use diesel::prelude::*;
-use actix_web::HttpResponse;
-use actix_web::HttpRequest;
-use crate::json_serialization::to_do_items::TodoItems;
 use crate::database::establish_connection;
-use crate::models::item::new_item::NewItem;
+use crate::diesel;
+use crate::json_serialization::to_do_items::TodoItems;
 use crate::models::item::item::Item;
+use crate::models::item::new_item::NewItem;
+use crate::process::process_input;
 use crate::schema::to_do;
+use crate::state::read_file;
+use crate::to_do::{enums::TaskStatus, to_do_factory};
+use actix_web::HttpRequest;
+use actix_web::HttpResponse;
+use diesel::prelude::*;
 
 #[allow(unused)]
 pub async fn create_json(req: HttpRequest) -> String {
@@ -19,7 +19,7 @@ pub async fn create_json(req: HttpRequest) -> String {
     let item = to_do_factory(&title.as_str(), TaskStatus::PENDING);
 
     process_input(item, "create".to_string(), &state);
-    return format!("{} created", title); 
+    return format!("{} created", title);
 }
 
 pub async fn create(req: HttpRequest) -> HttpResponse {

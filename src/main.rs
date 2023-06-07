@@ -4,13 +4,13 @@ use actix_web::{App, HttpServer};
 extern crate dotenv;
 
 mod json_serialization;
-mod process;
-mod state;
 mod to_do;
 mod views;
 mod schema;
 mod models;
 mod database;
+mod jwt;
+mod config;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

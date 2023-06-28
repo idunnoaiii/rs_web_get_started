@@ -1,5 +1,6 @@
 use actix_service::Service;
 use actix_web::{App, HttpServer};
+
 #[macro_use] extern crate diesel;
 extern crate dotenv;
 
@@ -14,6 +15,7 @@ mod config;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+
     HttpServer::new(|| {
         let app = App::new()
             .wrap_fn(|req, srv| {

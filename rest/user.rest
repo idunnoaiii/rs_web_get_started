@@ -1,0 +1,18 @@
+POST http://localhost:8000/v1/user/create
+Content-Type: application/json
+
+{
+  "username": "aben.gls97",
+  "email": "aben.gls97@gmail.com",
+  "password": "123!@#"
+}
+
+###
+
+POST http://localhost:8000/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "aben.gls97",
+  "password": "123!@#"
+}

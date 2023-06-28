@@ -8,7 +8,7 @@ use crate::database::establish_connection;
 use crate::schema::to_do;
 use crate::models::item::item::Item;
 
-pub async fn delete(to_do_item: web::Json<TodoItem>, token: JwtToken ) -> HttpResponse {
+pub async fn delete(to_do_item: web::Json<TodoItem>, _token: JwtToken ) -> HttpResponse {
     let connection = establish_connection();
 
     let items = to_do::table

@@ -28,10 +28,10 @@ impl FromRequest for DB {
     type Future = Ready<Result<DB, Error>>;
 
     fn from_request(_req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
-        match DBCONNECTION.db_connection.get() {
-            Ok(connection) => return ok(DB { connection }),
+        return match DBCONNECTION.db_connection.get() {
+            Ok(connection) => ok(DB { connection }),
             Err(_) => {
-                return err(ErrorServiceUnavailable(
+                err(ErrorServiceUnavailable(
                     "could not make connection to the database",
                 ))
             }
@@ -51,7 +51,7 @@ lazy_static! {
 
         return DbConnection {
             db_connection: PgPool::builder()
-                .max_size(1)
+                .max_size(8)
                 .build(ConnectionManager::new(connection_string))
                 .expect("failed to create db connection_pool"),
         };

@@ -2,7 +2,7 @@ GET http://localhost:8000/v1/item/get
 
 ###
 
-POST http://localhost:8000/v1/item/create/test test item 1 
+POST http://localhost:8000/v1/item/create/test test item 2
 
 
 ###

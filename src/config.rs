@@ -12,6 +12,6 @@ impl Config {
         let file_path = &args[args.len() - 1];
         let file = std::fs::File::open(file_path).unwrap();
         let map = serde_yaml::from_reader(file).unwrap();
-        return Config { map }
+        return Config { map };
     }
 }

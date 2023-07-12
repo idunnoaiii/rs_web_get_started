@@ -6,6 +6,7 @@ use diesel::{
     pg::PgConnection,
     r2d2::{ConnectionManager, Pool, PooledConnection},
 };
+
 use futures::future::{err, ok, Ready};
 use lazy_static::lazy_static;
 
@@ -15,7 +16,7 @@ pub struct DbConnection {
     pub db_connection: PgPool,
 }
 
-pub fn establish_connection() -> PooledConnection<ConnectionManager<PgConnection>>{
+pub fn establish_connection() -> PooledConnection<ConnectionManager<PgConnection>> {
     DBCONNECTION.db_connection.get().unwrap()
 }
 
@@ -30,12 +31,10 @@ impl FromRequest for DB {
     fn from_request(_req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
         return match DBCONNECTION.db_connection.get() {
             Ok(connection) => ok(DB { connection }),
-            Err(_) => {
-                err(ErrorServiceUnavailable(
-                    "could not make connection to the database",
-                ))
-            }
-        }
+            Err(_) => err(ErrorServiceUnavailable(
+                "could not make connection to the database",
+            )),
+        };
     }
 }
 
